@@ -44,21 +44,22 @@ export const getStaticProps = async () => {
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 const Blog: NextPage<Props> = ({ blogs }) => {
-  const [post, setPosts] = useState(blogs[0])
+  const [post, setPost] = useState(blogs[0])
   const router = useRouter();
   const slugId = router.query.slug;
-  if (!router.isFallback && !blogs[0].fields.slug) {
-    return <ErrorPage statusCode={404} />;
-  }
   useEffect(() => {
     for (let i = 0; i < blogs.length; i++) {
       if (blogs[i].fields.slug === slugId) {
-        setPosts(blogs[i]);
+        setPost(blogs[i]);
         break;
       }
     }
   }, []);
 
+
+  if (!router.isFallback && !blogs[0].fields.slug) {
+    return <ErrorPage statusCode={404} />;
+  }
   return (
     <div className={styles.container}>
       <Head>
